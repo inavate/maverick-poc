@@ -1,0 +1,257 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #e8ecf1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Modal container */
+.modal {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 580px;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.25rem 1.5rem 0.75rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.modal-header p {
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-top: 0.15rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: #374151;
+}
+
+.modal-body {
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-footer {
+    padding: 0.75rem 1.5rem 1.25rem;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+/* Messages */
+.msg {
+    padding: 0.6rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    display: none;
+    white-space: pre-line;
+    font-size: 0.82rem;
+}
+
+.msg.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+.msg.success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+}
+
+/* Card form area */
+.card-form-area {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.form-label span.req {
+    color: #dc2626;
+}
+
+/* Inputs and iframe target elements */
+.maverick-input-container {
+    display: block;
+    width: 100%;
+    height: 38px;
+    margin-bottom: 0.85rem;
+}
+
+.field {
+    margin-bottom: 0.85rem;
+}
+
+.row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.row>.field {
+    flex: 1;
+    margin-bottom: 0.85rem;
+}
+
+.save-note {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+}
+
+/* Charge section */
+.charge-section {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+}
+
+.charge-section h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #1f2937;
+}
+
+.charge-input {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    height: 38px;
+    background: #fff;
+}
+
+.charge-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+
+/* Buttons and Submit target */
+#submit-button {
+    width: 100%;
+}
+
+.maverick-input-container {
+    display: block;
+    width: 100%;
+    height: 38px;
+    margin-bottom: 0.85rem;
+    position: relative;
+}
+
+.maverick-input-container iframe {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+}
+
+.btn-primary {
+    background: #2563eb;
+    color: #fff;
+    border: 0;
+    padding: 10px 30px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+#submit-btn-wrapper:hover #custom-pay-button {
+    background: #1d4ed8;
+}
+
+#submit-btn-wrapper:active #custom-pay-button {
+    background: #1e3a8a;
+}
+
+.btn-primary:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 0.6rem 1.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
