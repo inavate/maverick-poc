@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	tokenMutex sync.Mutex
+	tokenMutex  sync.Mutex
 	cachedToken string
 )
 
@@ -116,29 +116,13 @@ func handleInitPayment(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("[InitPayment] Step 2: Requesting Maverick token for domain: %s\n", requestDomain)
 
-	payload := map[string]interface{}{
-		"expiration": 15,
-		"terminal":   745,
-		"domain":     requestDomain,
-		"saveCard":   "required",
-		"3ds":        false,
-	}
-	if merchID := os.Getenv("INAVATE_MERCHANT_ID"); merchID != "" {
-		payload["merchant_id"] = merchID
-	}
-	if locID := os.Getenv("INAVATE_LOCATION_ID"); locID != "" {
-		payload["location_id"] = locID
-	}
-	maverickReqBody, _ := json.Marshal(payload)
-
 	maverickURL := apiURL + "/api/v1/card/maverick/get-token"
-	req, err := http.NewRequest("POST", maverickURL, bytes.NewReader(maverickReqBody))
+	req, err := http.NewRequest("POST", maverickURL, nil)
 	if err != nil {
 		log.Printf("[InitPayment] Failed to build request: %v\n", err)
 		respondWithError(w, http.StatusInternalServerError, "Internal request construction error")
 		return
 	}
-	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+oauthData.AccessToken)
 
 	mavResp, err := http.DefaultClient.Do(req)
