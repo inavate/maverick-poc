@@ -159,7 +159,12 @@ async function chargeTokenizedCard() {
             throw new Error(data.error || 'Failed to complete payment');
         }
 
-        showSuccess(`Payment Successful!\n\nTransaction ID (Inavate): ${data.id}\nTransaction Number: ${data.transaction_number}\nStatus: ${data.status}\nCharged: $${data.amount.toFixed(2)}`);
+        let successMsg = `Payment Successful!\n\nTransaction ID (Inavate): ${data.id}\nInavate Txn Number: ${data.transaction_number}`;
+        if (data.reference_number) {
+            successMsg += `\nMaverick Transaction ID: ${data.reference_number}`;
+        }
+        successMsg += `\nStatus: ${data.status}\nCharged: $${data.amount.toFixed(2)}`;
+        showSuccess(successMsg);
 
         // Update custom button to successful paid state
         const btn = document.getElementById('custom-pay-button');

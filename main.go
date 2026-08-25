@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	tokenMutex  sync.Mutex
+	tokenMutex sync.Mutex
 	cachedToken string
 )
 
@@ -114,15 +114,27 @@ func handleInitPayment(w http.ResponseWriter, r *http.Request) {
 		requestDomain = "http://" + r.Host
 	}
 
-	log.Printf("[InitPayment] Step 2: Requesting Maverick token for domain: %s\n", requestDomain)
+	// Prepare payload for Inavate API token request
+	payload := map[string]string{
+		"domain":      requestDomain,
+		"merchant_id": os.Getenv("INAVATE_MERCHANT_ID"),
+		"location_id": os.Getenv("INAVATE_LOCATION_ID"),
+	}
+	payloadBytes, err := json.Marshal(payload)
+	if err != nil {
+		log.Printf("[InitPayment] Failed to marshal request payload: %v\n", err)
+		respondWithError(w, http.StatusInternalServerError, "Internal serialization error")
+		return
+	}
 
 	maverickURL := apiURL + "/api/v1/card/maverick/get-token"
-	req, err := http.NewRequest("POST", maverickURL, nil)
+	req, err := http.NewRequest("POST", maverickURL, bytes.NewReader(payloadBytes))
 	if err != nil {
 		log.Printf("[InitPayment] Failed to build request: %v\n", err)
 		respondWithError(w, http.StatusInternalServerError, "Internal request construction error")
 		return
 	}
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "Bearer "+oauthData.AccessToken)
 
 	mavResp, err := http.DefaultClient.Do(req)
