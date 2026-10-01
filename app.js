@@ -143,14 +143,23 @@ async function saveCard() {
 
 async function chargeTokenizedCard() {
     const amount = parseFloat(document.getElementById('payment-amount').value);
+    const fee = parseFloat(document.getElementById('payment-fee').value) || 0;
 
     try {
+        if (!(amount > 0)) {
+            throw new Error('Amount must be greater than 0');
+        }
+        if (fee < 0) {
+            throw new Error('Fee cannot be negative');
+        }
+
         const resp = await fetch('/api/v1/customer/maverick/charge', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 card_token: state.cardToken,
-                amount: amount
+                amount: amount,
+                fee: fee
             })
         });
 
@@ -163,7 +172,9 @@ async function chargeTokenizedCard() {
         if (data.reference_number) {
             successMsg += `\nMaverick Transaction ID: ${data.reference_number}`;
         }
-        successMsg += `\nStatus: ${data.status}\nCharged: $${data.amount.toFixed(2)}`;
+        successMsg += `\nStatus: ${data.status}\nAmount: $${Number(data.amount).toFixed(2)}`;
+        successMsg += `\nFee: $${Number(data.fee ?? fee).toFixed(2)}`;
+        successMsg += `\nTotal Charged: $${Number(data.total_amount ?? (data.amount + (data.fee ?? fee))).toFixed(2)}`;
         showSuccess(successMsg);
 
         // Update custom button to successful paid state
