@@ -205,8 +205,7 @@ async function chargeTokenizedCard() {
             street: street,
             city: city,
             state: stateVal,
-            zip: zip,
-            country: 'United State of America'
+            zip: zip
         };
     }
 
