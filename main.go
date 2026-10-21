@@ -148,7 +148,24 @@ func handleInitPayment(w http.ResponseWriter, r *http.Request) {
 	mavRespBody, _ := io.ReadAll(mavResp.Body)
 	if mavResp.StatusCode != http.StatusOK {
 		log.Printf("[InitPayment] Token generation failed with status %d: %s\n", mavResp.StatusCode, string(mavRespBody))
-		respondWithError(w, mavResp.StatusCode, "Maverick token generation failed")
+		var errData struct {
+			Error            string `json:"error"`
+			ErrorDescription string `json:"error_description"`
+			Message          string `json:"message"`
+		}
+		errMsg := "Maverick token generation failed"
+		if err := json.Unmarshal(mavRespBody, &errData); err == nil {
+			if errData.ErrorDescription != "" {
+				errMsg = errData.ErrorDescription
+			} else if errData.Message != "" {
+				errMsg = errData.Message
+			} else if errData.Error != "" {
+				errMsg = errData.Error
+			}
+		} else if len(mavRespBody) > 0 {
+			errMsg = string(mavRespBody)
+		}
+		respondWithError(w, mavResp.StatusCode, errMsg)
 		return
 	}
 
@@ -217,6 +234,7 @@ func handleSaveCard(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 
 	respBody, _ := io.ReadAll(resp.Body)
+	log.Printf("[SaveCard] Inavate API response status %d: %s\n", resp.StatusCode, string(respBody))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
 	w.Write(respBody)
@@ -244,7 +262,7 @@ func handleChargeCard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("[ChargeCard] Directing sale transaction request to Inavate API")
+	log.Printf("[ChargeCard] Directing sale transaction request to Inavate API: %s\n", string(body))
 
 	apiURL := os.Getenv("INAVATE_API_URL")
 	req, err := http.NewRequest("POST", apiURL+"/api/v1/card/maverick/charge", bytes.NewReader(body))
@@ -264,6 +282,7 @@ func handleChargeCard(w http.ResponseWriter, r *http.Request) {
 	defer resp.Body.Close()
 
 	respBody, _ := io.ReadAll(resp.Body)
+	log.Printf("[ChargeCard] Inavate API response status %d: %s\n", resp.StatusCode, string(respBody))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(resp.StatusCode)
 	w.Write(respBody)
